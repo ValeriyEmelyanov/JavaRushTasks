@@ -1,0 +1,18 @@
+
+1. javax.xml.bind.JAXBContext: Создаем новый инстанс JAXBContext.
+2. javax.xml.bind.Marshaller: Из инстанса контекста получаем marshaller. У marshaller устанавливаем свойство Marshaller.JAXB_FORMATTED_OUTPUT в истину, чтобы вывод был разбит по строчкам.
+3. javax.xml.parsers.DocumentBuilderFactory: Создаем фабрику DocumentBuilderFactory. Для преобразования CDATA узлов в текст устанавливаем factory.setCoalescing(true).
+4. javax.xml.parsers.DocumentBuilder: Создаем новый DocumentBuilder.
+5. org.w3c.dom.Document: С помощью билдера создаем новый документ.
+7. Маршализуем объект в документ.
+-- Документ (дерево) получили, теперь его необходимо обработать --
+8. org.w3c.dom.NodeList: из документа получаем список узлов.
+9. Обрабатываем список узлов в цикле:
+9.1. Если имя узла соответствует заданному, то вставляем перед ним комментарий node.getParentNode( ).insertBefore( document.createComment( comment ), node)
+9.2. Если тип первого дочернего узла node.getFirstChild() ревен Node.TEXT_NODE и контекст подходит под firstChild.getTextContent().matches(".*[<>&\'\"].*"), то заменяем node.replaceChild(cdataSection, firstChild). объект org.w3c.dom.CDATASection необходимо предварительно создать из контекста  firstChild.
+-- Документ готов! Получаем из документа строку. --
+10. javax.xml.transform.TransformerFactory: Получаем инстанс TransformerFactory.
+11. javax.xml.transform.Transformer: С помощью инсттанса TransformerFactory получаем transformer -а. Устанавливаем свойства вывода: transformer.setOutputProperty( OutputKeys.INDENT, "yes" ); ...ENCODING, "UTF-8", STANDALONE, "no"
+12. Получаем StringWriter.
+13. Трансформируем данные transformer.transform(new DOMSource(document), new StreamResult(writer)).
+14. Все, из stringWriter получаем строку.
