@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class HHStrategy implements Strategy {
-    private static final String URL_FORMAT = "http://hh.ua/search/vacancy?text=java+%s&page=%d";
+    private static final String URL_FORMAT = "http://hh.ru/search/vacancy?text=java+%s&page=%d";
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36";
 //    private static final String REFERRER = "no-referrer-when-downgrade";
     private static final String REFERRER = "";
