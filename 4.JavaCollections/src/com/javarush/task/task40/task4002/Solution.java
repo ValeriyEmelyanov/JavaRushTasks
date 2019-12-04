@@ -33,10 +33,6 @@ public class Solution {
 
         request.addHeader("User-Agent", "Mozilla/5.0");
 
-
-
-//        URLEncodedUtils.parse(urlParameters);
-
         List<NameValuePair> valuePairs = new ArrayList<NameValuePair>();
         String[] pairs = urlParameters.split("&");
         for (String pair : pairs) {
@@ -45,7 +41,6 @@ public class Solution {
         }
 
         request.setEntity(new UrlEncodedFormEntity(valuePairs));
-
 
         HttpResponse response = client.execute(request);
 
