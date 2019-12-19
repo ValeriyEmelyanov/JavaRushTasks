@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Обрабатывает рекламное видео
@@ -22,17 +23,15 @@ public class AdvertisementManager {
     }
 
     public void processVideos() throws NoVideoAvailableException {
+        if (storage.list().isEmpty()) {
+            StatisticManager.getInstance().register(new NoAvailableVideoEventDataRow(timeSeconds));
+            throw new NoVideoAvailableException();
+        }
+
         // Подобрать подходящие ролики
-        List<Advertisement> tmp = new ArrayList<>();
-        List<Advertisement> adList = storage.list();
-        for (Advertisement ad : adList) {
-            if (ad.getHits() <= 0) {
-                tmp.add(ad);
-            }
-        }
-        for (Advertisement ad : tmp) {
-            adList.remove(ad);
-        }
+        List<Advertisement> adList = storage.list().stream()
+                .filter(adv -> adv.getDuration() <= timeSeconds && adv.getHits() > 0)
+                .collect(Collectors.toList());
 
         if (adList.isEmpty()) {
             StatisticManager.getInstance().register(new NoAvailableVideoEventDataRow(timeSeconds));
@@ -103,7 +102,6 @@ public class AdvertisementManager {
             );
             ad.revalidate();
         }
-
     }
 
     private class AdOrderListGetter {
@@ -156,7 +154,7 @@ public class AdvertisementManager {
 
             // totalDuration = bestTotalDuration
 
-            return  adList.size() < bestList.size();
+            return adList.size() < bestList.size();
         }
 
         public void findBestList(List<Advertisement> source) {

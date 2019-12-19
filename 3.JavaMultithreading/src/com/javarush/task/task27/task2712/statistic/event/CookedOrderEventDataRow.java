@@ -6,11 +6,11 @@ import java.util.Date;
 import java.util.List;
 
 public class CookedOrderEventDataRow implements EventDataRow {
-    String tabletName;
-    String cookName;
-    int cookingTimeSeconds;
-    List<Dish> cookingDishs;
-    Date currentDate;
+    private String tabletName;
+    private String cookName;
+    private int cookingTimeSeconds;
+    private List<Dish> cookingDishs;
+    private Date currentDate;
 
     public CookedOrderEventDataRow(String tabletName, String cookName, int cookingTimeSeconds,
                                    List<Dish> cookingDishs) {
@@ -36,6 +36,9 @@ public class CookedOrderEventDataRow implements EventDataRow {
         return cookingTimeSeconds;
     }
 
+    public String getCookName() {
+        return cookName;
+    }
     //    @Override
 //    public String toString() {
 //        return String.format("Tablet: %s, cook: %s, time: %s, dishs: [%s]",
